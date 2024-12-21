@@ -1,7 +1,8 @@
 #include <iostream>
+using namespace std;
 
 void printHelloWorld() {
-	std::cout << "Hello World" << '\n';
+	cout << "Hello World" << '\n';
 }
 
 int main() {
