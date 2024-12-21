@@ -1,6 +1,12 @@
 #include <iostream>
 
-int main() {
+void printHelloWorld() {
 	std::cout << "Hello World" << '\n';
+}
+
+int main() {
+
+	printHelloWorld();
+
 	return 0;
 }
