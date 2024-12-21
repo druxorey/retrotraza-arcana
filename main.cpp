@@ -2,8 +2,7 @@
 #include <fstream> 
 using namespace std;
 
-struct person
-{
+struct person {
     string name;
     string species;
     float height;
@@ -14,29 +13,31 @@ struct person
     float NLDistance; //nose-upperlip (lip) distance
 };
 
+
 int main() {
 
-	ifstream suspectsIN("dataBase.in");
-    int suspectQuantity=0;
-    suspectsIN>>suspectQuantity;
+	ifstream suspectsInput("dataBase.in");
+    int suspectQuantity = 0;
+    suspectsInput >> suspectQuantity;
     person suspects[suspectQuantity];
     string name, lastname, magic;
-    for (int i = 0; i < suspectQuantity; i++)
-    {
-        suspectsIN>>name;
-        suspectsIN>>lastname;
-        suspects[i].name=name+" "+lastname;
-        suspectsIN>>suspects[i].species;
-        suspectsIN>>suspects[i].height;
-        suspectsIN>>magic;
-        if(magic=="No")suspects[i].hasMagic=false;
-        else suspects[i].hasMagic=true;
-        suspectsIN>>suspects[i].eyeDepth;
-        suspectsIN>>suspects[i].eyeDistance;
-        suspectsIN>>suspects[i].NFDistance;
-        suspectsIN>>suspects[i].NLDistance;
+
+    for (int i = 0; i < suspectQuantity; i++) {
+        suspectsInput >> name;
+        suspectsInput >> lastname;
+        suspects[i].name = name + " " + lastname;
+        suspectsInput >> suspects[i].species;
+        suspectsInput >> suspects[i].height;
+        suspectsInput >> magic;
+        if(magic=="No")suspects[i].hasMagic = false;
+        else suspects[i].hasMagic = true;
+        suspectsInput >> suspects[i].eyeDepth;
+        suspectsInput >> suspects[i].eyeDistance;
+        suspectsInput >> suspects[i].NFDistance;
+        suspectsInput >> suspects[i].NLDistance;
     }
-    suspectsIN.close();
+
+    suspectsInput.close();
 
 	return 0;
 }
