@@ -15,6 +15,23 @@ struct person {
     float NLDistance; //nose-upperlip (lip) distance
 };
 
+// START DEBUG FUNCTIONS
+
+void printPersonData(person suspects[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << suspects[i].fullName << ","
+             << suspects[i].species << ","
+             << suspects[i].height << ","
+             << (suspects[i].isMagic ? "Yes" : "No") << ","
+             << suspects[i].eyeDepth << ","
+             << suspects[i].eyeDistance << ","
+             << suspects[i].NFDistance << ","
+             << suspects[i].NLDistance << endl;
+    }
+}
+
+// END DEBUG FUNCTIONS
+
 
 ifstream checkFile(string fileName) {
 	ifstream file(fileName);
@@ -68,6 +85,8 @@ int main() {
 
     person suspects[suspectQuantity];
 	getPersonData(suspects, inputFile, suspectQuantity);
+
+    printPersonData(suspects, suspectQuantity);
 
     inputFile.close();
 
