@@ -5,10 +5,10 @@
 using namespace std;
 
 struct person {
-    string name;
+    string fullName;
     string species;
     float height;
-    bool hasMagic;
+    bool isMagic;
     float eyeDepth;
     float eyeDistance;
     float NFDistance; //nose-forehead distance
@@ -42,35 +42,35 @@ int getSuspectQuantity(ifstream &file) {
 
 int main() {
 
-	ifstream suspectsInput = checkFile("dataBase.in");
-    int suspectQuantity = getSuspectQuantity(suspectsInput);
+	ifstream inputFile = checkFile("dataBase.in");
+    int suspectQuantity = getSuspectQuantity(inputFile);
 
     person suspects[suspectQuantity];
-    string name, lastname, magic;
+    string firstName, lastName, magic;
 
 	printf("\e[0;33mDEBUG: Suspect quantity: %d\n\e[0m", suspectQuantity);
 
 	string line;
-	while (getline(suspectsInput, line)) {
+	while (getline(inputFile, line)) {
 		printf("\e[0;33mDEBUG: %s\n\e[0m", line.c_str());
 	}
 
     for (int i = 0; i < suspectQuantity; i++) {
-        suspectsInput >> name;
-        suspectsInput >> lastname;
-        suspects[i].name = name + " " + lastname;
-        suspectsInput >> suspects[i].species;
-        suspectsInput >> suspects[i].height;
-        suspectsInput >> magic;
-        if(magic=="No")suspects[i].hasMagic = false;
-        else suspects[i].hasMagic = true;
-        suspectsInput >> suspects[i].eyeDepth;
-        suspectsInput >> suspects[i].eyeDistance;
-        suspectsInput >> suspects[i].NFDistance;
-        suspectsInput >> suspects[i].NLDistance;
+        inputFile >> firstName;
+        inputFile >> lastName;
+        suspects[i].fullName = firstName + " " + lastName;
+        inputFile >> suspects[i].species;
+        inputFile >> suspects[i].height;
+        inputFile >> magic;
+        if (magic == "No") suspects[i].isMagic = false;
+        else suspects[i].isMagic = true;
+        inputFile >> suspects[i].eyeDepth;
+        inputFile >> suspects[i].eyeDistance;
+        inputFile >> suspects[i].NFDistance;
+        inputFile >> suspects[i].NLDistance;
     }
 
-    suspectsInput.close();
+    inputFile.close();
 
 	return 0;
 }
