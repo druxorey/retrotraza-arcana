@@ -40,35 +40,34 @@ int getSuspectQuantity(ifstream &file) {
 }
 
 
+void getPersonData(person suspects[], ifstream &file, int size) {
+	string firstName, lastName, magic;
+	printf("\e[0;33mDEBUG: Suspect quantity: %d\n\e[0m", size);
+
+    for (int i = 0; i < size; i++) {
+		file >> firstName;
+		file >> lastName;
+		suspects[i].fullName = firstName + " " + lastName;
+		file >> suspects[i].species;
+		file >> suspects[i].height;
+		file >> magic;
+		if (magic == "No") suspects[i].isMagic = false;
+		else suspects[i].isMagic = true;
+		file >> suspects[i].eyeDepth;
+		file >> suspects[i].eyeDistance;
+		file >> suspects[i].NFDistance;
+		file >> suspects[i].NLDistance;
+	}
+}
+
+
 int main() {
 
 	ifstream inputFile = checkFile("dataBase.in");
     int suspectQuantity = getSuspectQuantity(inputFile);
 
     person suspects[suspectQuantity];
-    string firstName, lastName, magic;
-
-	printf("\e[0;33mDEBUG: Suspect quantity: %d\n\e[0m", suspectQuantity);
-
-	string line;
-	while (getline(inputFile, line)) {
-		printf("\e[0;33mDEBUG: %s\n\e[0m", line.c_str());
-	}
-
-    for (int i = 0; i < suspectQuantity; i++) {
-        inputFile >> firstName;
-        inputFile >> lastName;
-        suspects[i].fullName = firstName + " " + lastName;
-        inputFile >> suspects[i].species;
-        inputFile >> suspects[i].height;
-        inputFile >> magic;
-        if (magic == "No") suspects[i].isMagic = false;
-        else suspects[i].isMagic = true;
-        inputFile >> suspects[i].eyeDepth;
-        inputFile >> suspects[i].eyeDistance;
-        inputFile >> suspects[i].NFDistance;
-        inputFile >> suspects[i].NLDistance;
-    }
+	getPersonData(suspects, inputFile, suspectQuantity);
 
     inputFile.close();
 
