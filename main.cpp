@@ -18,22 +18,42 @@ struct person {
 
 ifstream checkFile(string fileName) {
 	ifstream file(fileName);
+
 	if (!file) {
 		cerr << "\e[0;31mError: The file could not be opened\e[0m" << '\n';
 		exit(1);
 	}
+
 	return file;
+}
+
+
+int getSuspectQuantity(ifstream &file) {
+	string suspectLine = "";
+	getline(file, suspectLine);
+	int suspectQuantity = stoi(suspectLine);
+	if (suspectQuantity < 1 || suspectQuantity > 1000) {
+		cerr << "\e[0;31mError: The number of suspects is out of range\e[0m" << '\n';
+		exit(1);
+	}
+	return suspectQuantity;
 }
 
 
 int main() {
 
 	ifstream suspectsInput = checkFile("dataBase.in");
+    int suspectQuantity = getSuspectQuantity(suspectsInput);
 
-    int suspectQuantity = 0;
-    suspectsInput >> suspectQuantity;
     person suspects[suspectQuantity];
     string name, lastname, magic;
+
+	printf("\e[0;33mDEBUG: Suspect quantity: %d\n\e[0m", suspectQuantity);
+
+	string line;
+	while (getline(suspectsInput, line)) {
+		printf("\e[0;33mDEBUG: %s\n\e[0m", line.c_str());
+	}
 
     for (int i = 0; i < suspectQuantity; i++) {
         suspectsInput >> name;
