@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream> 
+#include <string>
+
 using namespace std;
 
 struct person {
@@ -14,9 +16,20 @@ struct person {
 };
 
 
+ifstream checkFile(string fileName) {
+	ifstream file(fileName);
+	if (!file) {
+		cerr << "\e[0;31mError: The file could not be opened\e[0m" << '\n';
+		exit(1);
+	}
+	return file;
+}
+
+
 int main() {
 
-	ifstream suspectsInput("dataBase.in");
+	ifstream suspectsInput = checkFile("dataBase.in");
+
     int suspectQuantity = 0;
     suspectsInput >> suspectQuantity;
     person suspects[suspectQuantity];
