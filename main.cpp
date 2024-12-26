@@ -100,7 +100,10 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 
     // Check if the current suspect can be an original shapeshifter
     if (!suspects[index].isMagic && suspects[index].species != "Kripsan") {
+		double heightDiff, eyeDepthDiff, eyeDistanceDiff, NFDistanceDiff, NLDistanceDiff;
+
 		printf("\e[0;33mDEBUG: Checking suspect %d: %s\n\e[0m", index, suspects[index].fullName.c_str());
+
         suspects[index].isOriginal = true;
         suspects[index].isShapeShifter = true;
         TOTAL_SHAPESHIFTERS++;
@@ -108,14 +111,22 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
         // Try to find other forms of the shapeshifter
         for (int i = 0; i < size; i++) {
             if (i != index && !suspects[i].isShapeShifter && !suspects[i].isMagic && suspects[i].species != "Kripsan") {
-                if (abs(suspects[i].height - suspects[index].height) <= 1 &&
-                    abs(suspects[i].eyeDepth - suspects[index].eyeDepth) > 0.05 &&
-                    abs(suspects[i].eyeDistance - suspects[index].eyeDistance) <= 0.05 &&
-                    abs(suspects[i].NFDistance - suspects[index].NFDistance) <= 0.05 &&
-                    abs(suspects[i].NLDistance - suspects[index].NLDistance) <= 0.05) {
+
+				heightDiff = abs(suspects[i].height - suspects[index].height);
+				eyeDepthDiff = abs(suspects[i].eyeDepth - suspects[index].eyeDepth);
+				eyeDistanceDiff = abs(suspects[i].eyeDistance - suspects[index].eyeDistance);
+				NFDistanceDiff = abs(suspects[i].NFDistance - suspects[index].NFDistance);
+				NLDistanceDiff = abs(suspects[i].NLDistance - suspects[index].NLDistance);
+
+                if (heightDiff <= 1 &&
+					eyeDistanceDiff > 0.05 &&
+					eyeDepthDiff <= 0.05 &&
+					NFDistanceDiff <= 0.05 &&
+					NFDistanceDiff <= 0.05) {
 
                     suspects[i].isShapeShifter = true;
                     TOTAL_SHAPESHIFTERS++;
+
                 }
             }
         }
