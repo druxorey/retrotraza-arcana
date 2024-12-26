@@ -94,6 +94,47 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 }
 
 
+void searchSecondaryIdentities(person suspects[], int size, int index, int &TOTAL_SHAPESHIFTERS) {
+	
+	for (int i = 0; i < size; i++) {
+		//Check if current comparison subject is initially innocent
+		bool isInnocent = (!suspects[i].isMagic && suspects[i].species != "Kripsan")? false : true;
+
+		//If it isn't we proceed to do a more exhaustive comparison
+		if (i != index && !suspects[i].isShapeShifter && !isInnocent) {
+			double heightDiff, eyeDepthDiff, eyeDistanceDiff, NFDistanceDiff, NLDistanceDiff;
+			int sameCharacteristics = 0;
+
+			heightDiff = abs(suspects[i].height - suspects[index].height);
+			eyeDepthDiff = suspects[i].eyeDepth - suspects[index].eyeDepth; //Eye depth difference needs to be a signed value for comparison
+			eyeDistanceDiff = abs(suspects[i].eyeDistance - suspects[index].eyeDistance);
+			NFDistanceDiff = abs(suspects[i].NFDistance - suspects[index].NFDistance);
+			NLDistanceDiff = abs(suspects[i].NLDistance - suspects[index].NLDistance);
+
+			//Original subject and comparison subject must have at least one identical facial feature
+			if (eyeDistanceDiff <= 0.05) sameCharacteristics++;
+			if (NFDistanceDiff <= 0.05) sameCharacteristics++;
+			if (NLDistanceDiff <= 0.05) sameCharacteristics++;
+			//If OgSubject and ComSubject have no identical facial features or their height/eye depth gets out of parameters ComSubject is not a secondary identity
+			if (heightDiff > 1 || eyeDepthDiff < -0.05 || sameCharacteristics < 1) break;
+
+			//Marks first OgSubject as Original identity, adds to the total shapeshifters and assingns it an index number 
+			if (!suspects[index].isShapeShifter){
+				TOTAL_SHAPESHIFTERS++;
+				suspects[index].isShapeShifter = true;
+				suspects[index].shapeShifterIndex = TOTAL_SHAPESHIFTERS;
+			} 
+			//Marks ComSubject as secondary identity to prevent the function from adding to the total shapeshifters in next iteration
+			suspects[i].isShapeShifter = true;
+			suspects[i].shapeShifterIndex = TOTAL_SHAPESHIFTERS;
+			
+			//Makes secondary identity the new OgSubject for next iterations
+			index = i;
+		}
+	}
+}
+
+
 void searchShapeShifter(person suspects[], int size, int index = 0) {
     // Base case: if all suspects have been checked
     if (index >= size) return;
@@ -101,43 +142,13 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 	// Check if the current suspect is innocent
 	bool isInnocent = (!suspects[index].isMagic && suspects[index].species != "Kripsan")? false : true;
 
-    // Check if the current suspect can be an original shapeshifter
-    if (!isInnocent) {
-		double heightDiff, eyeDepthDiff, eyeDistanceDiff, NFDistanceDiff, NLDistanceDiff;
+	//If the suspect isn't innocent and isn't yet marked as a shapeshifter we proceed to find possible second identities
+	if (!isInnocent && !suspects[index].isShapeShifter){
+		searchSecondaryIdentities(suspects, size, index, TOTAL_SHAPESHIFTERS);
+	}
 
-		printf("\e[0;33mDEBUG: Checking suspect %d: %s\n\e[0m", index, suspects[index].fullName.c_str());
-
-        TOTAL_SHAPESHIFTERS++;
-        suspects[index].isShapeShifter = true;
-        suspects[index].shapeShifterIndex = TOTAL_SHAPESHIFTERS;
-
-        // Try to find other forms of the shapeshifter
-        for (int i = 0; i < size; i++) {
-            if (i != index && !suspects[i].isShapeShifter && !isInnocent) {
-
-				heightDiff = abs(suspects[i].height - suspects[index].height);
-				eyeDepthDiff = abs(suspects[i].eyeDepth - suspects[index].eyeDepth);
-				eyeDistanceDiff = abs(suspects[i].eyeDistance - suspects[index].eyeDistance);
-				NFDistanceDiff = abs(suspects[i].NFDistance - suspects[index].NFDistance);
-				NLDistanceDiff = abs(suspects[i].NLDistance - suspects[index].NLDistance);
-
-                if (heightDiff <= 1 &&
-					eyeDistanceDiff > 0.05 &&
-					eyeDepthDiff <= 0.05 &&
-					NFDistanceDiff <= 0.05 &&
-					NFDistanceDiff <= 0.05) {
-
-                    suspects[i].isShapeShifter = true;
-                    TOTAL_SHAPESHIFTERS++;
-
-                    searchShapeShifter(suspects, size, i);
-                }
-            }
-        }
-    }
-	
-    // Move to the next suspect
-    searchShapeShifter(suspects, size, index + 1);
+	// Move to the next suspect
+		searchShapeShifter(suspects, size, index + 1);
 }
 
 
