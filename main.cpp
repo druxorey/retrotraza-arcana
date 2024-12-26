@@ -12,15 +12,15 @@ struct person {
     bool isMagic;
     float eyeDepth;
     float eyeDistance;
-    float NFDistance; //nose-forehead distance
-    float NLDistance; //nose-upperlip (lip) distance
+    float NFDistance; // Nose-Forehead distance
+    float NLDistance; // Nose-Upperlip (lip) distance
 	
 	bool isShapeShifter = false;
 	bool isOriginal = false;
 };
 
 
-// START DEBUG FUNCTIONS
+// START OF DEBUG FUNCTIONS
 
 void printPersonData(person suspects[], int size) {
     for (int i = 0; i < size; i++) {
@@ -36,7 +36,7 @@ void printPersonData(person suspects[], int size) {
 }
 
 
-void printShapeshifterData(person suspects[], int size) {
+void printShapeShiftersData(person suspects[], int size) {
 	for (int i = 0; i < size; i++) {
 		cout << suspects[i].fullName << ","
 			 << (suspects[i].isShapeShifter ? "Yes" : "No") << ","
@@ -44,7 +44,7 @@ void printShapeshifterData(person suspects[], int size) {
 	}
 }
 
-// END DEBUG FUNCTIONS
+// END OF DEBUG FUNCTIONS
 
 
 ifstream checkFile(string fileName) {
@@ -61,8 +61,10 @@ ifstream checkFile(string fileName) {
 
 int getSuspectQuantity(ifstream &file) {
 	string suspectLine = "";
+	// It has to be the first function to be called to get the quantity correctly
 	getline(file, suspectLine);
 	int suspectQuantity = stoi(suspectLine);
+
 	if (suspectQuantity < 1 || suspectQuantity > 1000) {
 		cerr << "\e[0;31mError: The number of suspects is out of range\e[0m" << '\n';
 		exit(1);
@@ -75,6 +77,7 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 	string firstName, lastName, magic;
 	printf("\e[0;33mDEBUG: Suspect quantity: %d\n\e[0m", size);
 
+	// Iterate from the second line of the file onwards
     for (int i = 0; i < size; i++) {
 		file >> firstName;
 		file >> lastName;
@@ -94,10 +97,13 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 int main() {
 	ifstream inputFile = checkFile("dataBase.in");
 
+	// File reading and data storage
     int suspectQuantity = getSuspectQuantity(inputFile);
     person suspects[suspectQuantity];
+
 	getPersonData(suspects, inputFile, suspectQuantity);
 
+	// Data display
     printPersonData(suspects, suspectQuantity);
 	printf("\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
 
