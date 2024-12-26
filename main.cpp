@@ -16,7 +16,7 @@ struct person {
     float NLDistance; // Nose-Upperlip (lip) distance
 	
 	bool isShapeShifter = false;
-	bool isOriginal = false;
+	int shapeShifterIndex = -1;
 };
 
 
@@ -40,7 +40,7 @@ void printShapeShiftersData(person suspects[], int size) {
 	for (int i = 0; i < size; i++) {
 		cout << suspects[i].fullName << ","
 			 << (suspects[i].isShapeShifter ? "Yes" : "No") << ","
-			 << (suspects[i].isOriginal ? "Yes" : "No") << endl;
+			 << suspects[i].shapeShifterIndex << endl;
 	}
 }
 
@@ -98,19 +98,22 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
     // Base case: if all suspects have been checked
     if (index >= size) return;
 
+	// Check if the current suspect is innocent
+	bool isInnocent = (!suspects[index].isMagic && suspects[index].species != "Kripsan")? false : true;
+
     // Check if the current suspect can be an original shapeshifter
-    if (!suspects[index].isMagic && suspects[index].species != "Kripsan") {
+    if (!isInnocent) {
 		double heightDiff, eyeDepthDiff, eyeDistanceDiff, NFDistanceDiff, NLDistanceDiff;
 
 		printf("\e[0;33mDEBUG: Checking suspect %d: %s\n\e[0m", index, suspects[index].fullName.c_str());
 
-        suspects[index].isOriginal = true;
-        suspects[index].isShapeShifter = true;
         TOTAL_SHAPESHIFTERS++;
+        suspects[index].isShapeShifter = true;
+        suspects[index].shapeShifterIndex = TOTAL_SHAPESHIFTERS;
 
         // Try to find other forms of the shapeshifter
         for (int i = 0; i < size; i++) {
-            if (i != index && !suspects[i].isShapeShifter && !suspects[i].isMagic && suspects[i].species != "Kripsan") {
+            if (i != index && !suspects[i].isShapeShifter && !isInnocent) {
 
 				heightDiff = abs(suspects[i].height - suspects[index].height);
 				eyeDepthDiff = abs(suspects[i].eyeDepth - suspects[index].eyeDepth);
