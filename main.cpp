@@ -94,6 +94,38 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 }
 
 
+void searchShapeShifter(person suspects[], int size, int index = 0) {
+    // Base case: if all suspects have been checked
+    if (index >= size) return;
+
+    // Check if the current suspect can be an original shapeshifter
+    if (!suspects[index].isMagic && suspects[index].species != "Kripsan") {
+		printf("\e[0;33mDEBUG: Checking suspect %d: %s\n\e[0m", index, suspects[index].fullName.c_str());
+        suspects[index].isOriginal = true;
+        suspects[index].isShapeShifter = true;
+        TOTAL_SHAPESHIFTERS++;
+
+        // Try to find other forms of the shapeshifter
+        for (int i = 0; i < size; i++) {
+            if (i != index && !suspects[i].isShapeShifter && !suspects[i].isMagic && suspects[i].species != "Kripsan") {
+                if (abs(suspects[i].height - suspects[index].height) <= 1 &&
+                    abs(suspects[i].eyeDepth - suspects[index].eyeDepth) > 0.05 &&
+                    abs(suspects[i].eyeDistance - suspects[index].eyeDistance) <= 0.05 &&
+                    abs(suspects[i].NFDistance - suspects[index].NFDistance) <= 0.05 &&
+                    abs(suspects[i].NLDistance - suspects[index].NLDistance) <= 0.05) {
+
+                    suspects[i].isShapeShifter = true;
+                    TOTAL_SHAPESHIFTERS++;
+                }
+            }
+        }
+    }
+	
+    // Move to the next suspect
+    searchShapeShifter(suspects, size, index + 1);
+}
+
+
 int main() {
 	ifstream inputFile = checkFile("dataBase.in");
 
@@ -103,9 +135,17 @@ int main() {
 
 	getPersonData(suspects, inputFile, suspectQuantity);
 
+	// Search for shapeshifters
+	searchShapeShifter(suspects, suspectQuantity);
+
 	// Data display
+	printf("\n\e[0;32mSuspect data:\n\e[0m");
     printPersonData(suspects, suspectQuantity);
-	printf("\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
+
+	printf("\n\e[0;32mShapeshifter data:\n\e[0m");
+	printShapeShiftersData(suspects, suspectQuantity);
+
+	printf("\n\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
 
     inputFile.close();
 
