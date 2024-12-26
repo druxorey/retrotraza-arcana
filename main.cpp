@@ -3,6 +3,8 @@
 
 using namespace std;
 
+int TOTAL_SHAPESHIFTERS = 0;
+
 struct person {
     string fullName;
     string species;
@@ -12,7 +14,11 @@ struct person {
     float eyeDistance;
     float NFDistance; //nose-forehead distance
     float NLDistance; //nose-upperlip (lip) distance
+	
+	bool isShapeShifter = false;
+	bool isOriginal = false;
 };
+
 
 // START DEBUG FUNCTIONS
 
@@ -67,8 +73,7 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 		file >> suspects[i].species;
 		file >> suspects[i].height;
 		file >> magic;
-		if (magic == "No") suspects[i].isMagic = false;
-		else suspects[i].isMagic = true;
+		suspects[i].isMagic = (magic == "No") ? false : true;
 		file >> suspects[i].eyeDepth;
 		file >> suspects[i].eyeDistance;
 		file >> suspects[i].NFDistance;
@@ -78,14 +83,14 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 
 
 int main() {
-
 	ifstream inputFile = checkFile("dataBase.in");
-    int suspectQuantity = getSuspectQuantity(inputFile);
 
+    int suspectQuantity = getSuspectQuantity(inputFile);
     person suspects[suspectQuantity];
 	getPersonData(suspects, inputFile, suspectQuantity);
 
     printPersonData(suspects, suspectQuantity);
+	printf("\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
 
     inputFile.close();
 
