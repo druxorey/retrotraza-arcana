@@ -24,13 +24,13 @@ struct person {
 
 void printPersonData(person suspects[], int size) {
     for (int i = 0; i < size; i++) {
-        cout << suspects[i].fullName << ","
-             << suspects[i].species << ","
-             << suspects[i].height << ","
-             << (suspects[i].isMagic ? "Yes" : "No") << ","
-             << suspects[i].eyeDepth << ","
-             << suspects[i].eyeDistance << ","
-             << suspects[i].NFDistance << ","
+        cout << suspects[i].fullName << "\e[0;31m,\e[0m "
+             << suspects[i].species << "\e[0;31m,\e[0m "
+             << suspects[i].height << "\e[0;31m,\e[0m "
+             << (suspects[i].isMagic ? "Yes" : "No") << "\e[0;31m,\e[0m "
+             << suspects[i].eyeDepth << "\e[0;31m,\e[0m "
+             << suspects[i].eyeDistance << "\e[0;31m,\e[0m "
+             << suspects[i].NFDistance << "\e[0;31m,\e[0m "
              << suspects[i].NLDistance << endl;
     }
 }
@@ -38,8 +38,8 @@ void printPersonData(person suspects[], int size) {
 
 void printShapeShiftersData(person suspects[], int size) {
 	for (int i = 0; i < size; i++) {
-		cout << suspects[i].fullName << ","
-			 << (suspects[i].isShapeShifter ? "Yes" : "No") << ","
+		cout << suspects[i].fullName << "\e[0;31m,\e[0m "
+			 << (suspects[i].isShapeShifter ? "Yes" : "No") << "\e[0;31m,\e[0m "
 			 << suspects[i].shapeShifterIndex << endl;
 	}
 }
@@ -130,6 +130,7 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
                     suspects[i].isShapeShifter = true;
                     TOTAL_SHAPESHIFTERS++;
 
+                    searchShapeShifter(suspects, size, i);
                 }
             }
         }
