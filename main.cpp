@@ -152,6 +152,25 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 }
 
 
+void printResults(person suspects[], int size, int index = 1){
+	if (index>TOTAL_SHAPESHIFTERS) return;
+	if (index==1) cout<<TOTAL_SHAPESHIFTERS<<endl;
+	if (TOTAL_SHAPESHIFTERS>0){
+		for (int i = 0, identityCounter = 0; i < size; i++, identityCounter++) {
+			if (suspects[i].shapeShifterIndex==index){
+				cout<<index<<" - "
+					<<suspects[i].fullName;
+					if (identityCounter==0){
+						cout<<" (O)";
+					}
+				cout<<endl;
+			}
+		}
+		printResults(suspects, size, index+1);
+	}
+}
+
+
 int main() {
 	ifstream inputFile = checkFile("dataBase.in");
 
@@ -172,6 +191,9 @@ int main() {
 	printShapeShiftersData(suspects, suspectQuantity);
 
 	printf("\n\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
+
+	//Results display according to document specifications
+	printResults(suspects, suspectQuantity);
 
     inputFile.close();
 
