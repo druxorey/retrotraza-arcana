@@ -35,6 +35,15 @@ void printPersonData(person suspects[], int size) {
     }
 }
 
+
+void printShapeshifterData(person suspects[], int size) {
+	for (int i = 0; i < size; i++) {
+		cout << suspects[i].fullName << ","
+			 << (suspects[i].isShapeShifter ? "Yes" : "No") << ","
+			 << (suspects[i].isOriginal ? "Yes" : "No") << endl;
+	}
+}
+
 // END DEBUG FUNCTIONS
 
 
