@@ -38,9 +38,11 @@ void printPersonData(person suspects[], int size) {
 
 void printShapeShiftersData(person suspects[], int size) {
 	for (int i = 0; i < size; i++) {
-		cout << suspects[i].fullName << "\e[0;31m,\e[0m "
-			 << (suspects[i].isShapeShifter ? "Yes" : "No") << "\e[0;31m,\e[0m "
-			 << suspects[i].shapeShifterIndex << endl;
+		if (suspects[i].isShapeShifter == true) {
+			cout << suspects[i].fullName << "\e[0;31m,\e[0m "
+				<< "\e[0;33m" << suspects[i].eyeDepth << "\e[0;31m,\e[0m "
+				<< suspects[i].shapeShifterIndex << endl;
+		}
 	}
 }
 
@@ -151,6 +153,19 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 }
 
 
+void sortSuspects(person suspects[], int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = i + 1; j < size; j++) {
+            if (suspects[i].eyeDepth > suspects[j].eyeDepth && suspects[j].shapeShifterIndex != -1) {
+                person temp = suspects[i];
+                suspects[i] = suspects[j];
+                suspects[j] = temp;
+            }
+        }
+    }
+}
+
+
 void printResults(person suspects[], int size, int index = 1){
 	if (index > TOTAL_SHAPESHIFTERS) return;
 	if (index == 1) cout << TOTAL_SHAPESHIFTERS << endl;
@@ -195,6 +210,7 @@ int main() {
 	printf("\n\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
 
 	//Results display according to document specifications
+	sortSuspects(suspects, suspectQuantity);
 	printResults(suspects, suspectQuantity);
 
     inputFile.close();
