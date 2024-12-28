@@ -154,12 +154,18 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 void printResults(person suspects[], int size, int index = 1){
 	if (index > TOTAL_SHAPESHIFTERS) return;
 	if (index == 1) cout << TOTAL_SHAPESHIFTERS << endl;
+
 	if (TOTAL_SHAPESHIFTERS > 0){
-		for (int i = 0, identityCounter = 0; i < size; i++, identityCounter++) {
-			if (suspects[i].shapeShifterIndex == index){
+
+		int identityCounter = 0;
+
+		for (int i = 0; i < size; i++) {
+			if (suspects[i].shapeShifterIndex == index) {
 				cout << index << " - " << suspects[i].fullName;
 				if (identityCounter == 0) cout << " (O)";
 				cout << endl;
+
+				identityCounter++;
 			}
 		}
 		printResults(suspects, size, index + 1);
