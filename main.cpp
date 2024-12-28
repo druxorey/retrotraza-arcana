@@ -95,40 +95,39 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 
 
 void searchSecondaryIdentities(person suspects[], int size, int index, int &TOTAL_SHAPESHIFTERS) {
-	
 	for (int i = 0; i < size; i++) {
-		//Check if current comparison subject is initially innocent
+		// Check if current comparison subject is initially innocent
 		bool isInnocent = (!suspects[i].isMagic && suspects[i].species != "Kripsan")? false : true;
 
-		//If it isn't we proceed to do a more exhaustive comparison
+		// If it isn't we proceed to do a more exhaustive comparison
 		if (i != index && !suspects[i].isShapeShifter && !isInnocent) {
 			double heightDiff, eyeDepthDiff, eyeDistanceDiff, NFDistanceDiff, NLDistanceDiff;
 			int sameCharacteristics = 0;
 
 			heightDiff = abs(suspects[i].height - suspects[index].height);
-			eyeDepthDiff = suspects[i].eyeDepth - suspects[index].eyeDepth; //Eye depth difference needs to be a signed value for comparison
+			eyeDepthDiff = suspects[i].eyeDepth - suspects[index].eyeDepth; // Eye depth difference needs to be a signed value for comparison
 			eyeDistanceDiff = abs(suspects[i].eyeDistance - suspects[index].eyeDistance);
 			NFDistanceDiff = abs(suspects[i].NFDistance - suspects[index].NFDistance);
 			NLDistanceDiff = abs(suspects[i].NLDistance - suspects[index].NLDistance);
 
-			//Original subject and comparison subject must have at least one identical facial feature
+			// Original subject and comparison subject must have at least one identical facial feature
 			if (eyeDistanceDiff <= 0.05) sameCharacteristics++;
 			if (NFDistanceDiff <= 0.05) sameCharacteristics++;
 			if (NLDistanceDiff <= 0.05) sameCharacteristics++;
-			//If OgSubject and ComSubject have no identical facial features or their height/eye depth gets out of parameters ComSubject is not a secondary identity
+			// If OgSubject and ComSubject have no identical facial features or their height/eye depth gets out of parameters ComSubject is not a secondary identity
 			if (heightDiff > 1 || eyeDepthDiff < -0.05 || sameCharacteristics < 1) break;
 
-			//Marks first OgSubject as Original identity, adds to the total shapeshifters and assingns it an index number 
+			// Marks first OgSubject as Original identity, adds to the total shapeshifters and assingns it an index number
 			if (!suspects[index].isShapeShifter){
 				TOTAL_SHAPESHIFTERS++;
 				suspects[index].isShapeShifter = true;
 				suspects[index].shapeShifterIndex = TOTAL_SHAPESHIFTERS;
-			} 
-			//Marks ComSubject as secondary identity to prevent the function from adding to the total shapeshifters in next iteration
+			}
+			// Marks ComSubject as secondary identity to prevent the function from adding to the total shapeshifters in next iteration
 			suspects[i].isShapeShifter = true;
 			suspects[i].shapeShifterIndex = TOTAL_SHAPESHIFTERS;
 			
-			//Makes secondary identity the new OgSubject for next iterations
+			// Makes secondary identity the new OgSubject for next iterations
 			index = i;
 		}
 	}
@@ -148,25 +147,22 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 	}
 
 	// Move to the next suspect
-		searchShapeShifter(suspects, size, index + 1);
+	searchShapeShifter(suspects, size, index + 1);
 }
 
 
 void printResults(person suspects[], int size, int index = 1){
-	if (index>TOTAL_SHAPESHIFTERS) return;
-	if (index==1) cout<<TOTAL_SHAPESHIFTERS<<endl;
-	if (TOTAL_SHAPESHIFTERS>0){
+	if (index > TOTAL_SHAPESHIFTERS) return;
+	if (index == 1) cout << TOTAL_SHAPESHIFTERS << endl;
+	if (TOTAL_SHAPESHIFTERS > 0){
 		for (int i = 0, identityCounter = 0; i < size; i++, identityCounter++) {
-			if (suspects[i].shapeShifterIndex==index){
-				cout<<index<<" - "
-					<<suspects[i].fullName;
-					if (identityCounter==0){
-						cout<<" (O)";
-					}
-				cout<<endl;
+			if (suspects[i].shapeShifterIndex == index){
+				cout << index << " - " << suspects[i].fullName;
+				if (identityCounter == 0) cout << " (O)";
+				cout << endl;
 			}
 		}
-		printResults(suspects, size, index+1);
+		printResults(suspects, size, index + 1);
 	}
 }
 
