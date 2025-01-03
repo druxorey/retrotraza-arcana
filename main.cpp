@@ -20,35 +20,6 @@ struct person {
 };
 
 
-// START OF DEBUG FUNCTIONS
-
-void printPersonData(person suspects[], int size) {
-    for (int i = 0; i < size; i++) {
-        cout << suspects[i].fullName << "\e[0;31m,\e[0m "
-             << suspects[i].species << "\e[0;31m,\e[0m "
-             << suspects[i].height << "\e[0;31m,\e[0m "
-             << (suspects[i].isMagic ? "Yes" : "No") << "\e[0;31m,\e[0m "
-             << suspects[i].eyeDepth << "\e[0;31m,\e[0m "
-             << suspects[i].eyeDistance << "\e[0;31m,\e[0m "
-             << suspects[i].NFDistance << "\e[0;31m,\e[0m "
-             << suspects[i].NLDistance << endl;
-    }
-}
-
-
-void printShapeShiftersData(person suspects[], int size) {
-	for (int i = 0; i < size; i++) {
-		if (suspects[i].isShapeShifter == true) {
-			cout << suspects[i].fullName << "\e[0;31m,\e[0m "
-				<< "\e[0;33m" << suspects[i].eyeDepth << "\e[0;31m,\e[0m "
-				<< suspects[i].shapeShifterIndex << endl;
-		}
-	}
-}
-
-// END OF DEBUG FUNCTIONS
-
-
 ifstream checkFile(string fileName) {
 	ifstream file(fileName);
 
@@ -77,7 +48,6 @@ int getSuspectQuantity(ifstream &file) {
 
 void getPersonData(person suspects[], ifstream &file, int size) {
 	string firstName, lastName, magic;
-	printf("\e[0;33mDEBUG: Suspect quantity: %d\n\e[0m", size);
 
 	// Iterate from the second line of the file onwards
     for (int i = 0; i < size; i++) {
@@ -199,15 +169,6 @@ int main() {
 
 	// Search for shapeshifters
 	searchShapeShifter(suspects, suspectQuantity);
-
-	// Data display
-	printf("\n\e[0;32mSuspect data:\n\e[0m");
-    printPersonData(suspects, suspectQuantity);
-
-	printf("\n\e[0;32mShapeshifter data:\n\e[0m");
-	printShapeShiftersData(suspects, suspectQuantity);
-
-	printf("\n\e[0;32mTotal shapeshifters: %d\n\e[0m", TOTAL_SHAPESHIFTERS);
 
 	//Results display according to document specifications
 	sortSuspects(suspects, suspectQuantity);
