@@ -89,7 +89,7 @@ void searchSecondaryIdentities(person suspects[], int size, int index, int &TOTA
 			// If OgSubject and ComSubject have no identical facial features or their height/eye depth gets out of parameters ComSubject is not a secondary identity
 			if (heightDiff > 1 || eyeDepthDiff < -0.05 || sameCharacteristics < 1) break;
 
-			// Marks first OgSubject as Original identity, adds to the total shapeshifters and assingns it an index number
+			// Marks first OgSubject as shapeshifter, adds to the total shapeshifters and assingns it an index number
 			if (!suspects[index].isShapeShifter){
 				TOTAL_SHAPESHIFTERS++;
 				suspects[index].isShapeShifter = true;
