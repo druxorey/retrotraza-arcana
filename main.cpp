@@ -87,7 +87,7 @@ void searchSecondaryIdentities(person suspects[], int size, int index, int &TOTA
 			if (NFDistanceDiff <= 0.05) sameCharacteristics++;
 			if (NLDistanceDiff <= 0.05) sameCharacteristics++;
 			// If OgSubject and ComSubject have no identical facial features or their height/eye depth gets out of parameters ComSubject is not a secondary identity
-			if (heightDiff > 1 || eyeDepthDiff < -0.05 || sameCharacteristics < 1) break;
+			if (heightDiff > 1 || eyeDepthDiff < -0.05 || sameCharacteristics < 1) continue;
 
 			// Marks first OgSubject as shapeshifter, adds to the total shapeshifters and assingns it an index number
 			if (!suspects[index].isShapeShifter){
@@ -137,24 +137,25 @@ void sortSuspects(person suspects[], int size) {
 
 
 void printResults(person suspects[], int size, int index = 1){
+	if (TOTAL_SHAPESHIFTERS==0){
+		cout << "0" << endl;
+		return;
+	}
 	if (index > TOTAL_SHAPESHIFTERS) return;
 	if (index == 1) cout << TOTAL_SHAPESHIFTERS << endl;
 
-	if (TOTAL_SHAPESHIFTERS > 0){
+	int identityCounter = 0;
 
-		int identityCounter = 0;
+	for (int i = 0; i < size; i++) {
+		if (suspects[i].shapeShifterIndex == index) {
+			cout << index << " - " << suspects[i].fullName;
+			if (identityCounter == 0) cout << " (O)";
+			cout << endl;
 
-		for (int i = 0; i < size; i++) {
-			if (suspects[i].shapeShifterIndex == index) {
-				cout << index << " - " << suspects[i].fullName;
-				if (identityCounter == 0) cout << " (O)";
-				cout << endl;
-
-				identityCounter++;
-			}
+			identityCounter++;
 		}
-		printResults(suspects, size, index + 1);
 	}
+	printResults(suspects, size, index + 1);
 }
 
 
