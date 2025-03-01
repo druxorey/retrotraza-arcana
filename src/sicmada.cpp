@@ -6,14 +6,14 @@ using namespace std;
 int TOTAL_SHAPESHIFTERS = 0;
 
 struct person {
-    string fullName;
-    string species;
-    float height;
-    bool isMagic;
-    float eyeDepth;
-    float eyeDistance;
-    float NFDistance; // Nose-Forehead distance
-    float NLDistance; // Nose-Upperlip (lip) distance
+	string fullName;
+	string species;
+	float height;
+	bool isMagic;
+	float eyeDepth;
+	float eyeDistance;
+	float NFDistance; // Nose-Forehead distance
+	float NLDistance; // Nose-Upperlip (lip) distance
 	
 	bool isShapeShifter = false;
 	int shapeShifterIndex = -1;
@@ -50,7 +50,7 @@ void getPersonData(person suspects[], ifstream &file, int size) {
 	string firstName, lastName, magic;
 
 	// Iterate from the second line of the file onwards
-    for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++) {
 		file >> firstName;
 		file >> lastName;
 		suspects[i].fullName = firstName + " " + lastName;
@@ -107,8 +107,8 @@ void searchSecondaryIdentities(person suspects[], int size, int index, int &TOTA
 
 
 void searchShapeShifter(person suspects[], int size, int index = 0) {
-    // Base case: if all suspects have been checked
-    if (index >= size) return;
+	// Base case: if all suspects have been checked
+	if (index >= size) return;
 
 	// Check if the current suspect is innocent
 	bool isInnocent = (!suspects[index].isMagic && suspects[index].species != "Kripsan")? false : true;
@@ -124,15 +124,15 @@ void searchShapeShifter(person suspects[], int size, int index = 0) {
 
 
 void sortSuspects(person suspects[], int size) {
-    for (int i = 0; i < size; i++) {
-        for (int j = i + 1; j < size; j++) {
-            if (suspects[i].eyeDepth > suspects[j].eyeDepth && suspects[j].shapeShifterIndex != -1) {
-                person temp = suspects[i];
-                suspects[i] = suspects[j];
-                suspects[j] = temp;
-            }
-        }
-    }
+	for (int i = 0; i < size; i++) {
+		for (int j = i + 1; j < size; j++) {
+			if (suspects[i].eyeDepth > suspects[j].eyeDepth && suspects[j].shapeShifterIndex != -1) {
+				person temp = suspects[i];
+				suspects[i] = suspects[j];
+				suspects[j] = temp;
+			}
+		}
+	}
 }
 
 
@@ -160,11 +160,11 @@ void printResults(person suspects[], int size, int index = 1){
 
 
 int main() {
-	ifstream inputFile = checkFile("dataBase.in");
+	ifstream inputFile = checkFile("../build/dataBase.in");
 
 	// File reading and data storage
-    int suspectQuantity = getSuspectQuantity(inputFile);
-    person suspects[suspectQuantity];
+	int suspectQuantity = getSuspectQuantity(inputFile);
+	person suspects[suspectQuantity];
 
 	getPersonData(suspects, inputFile, suspectQuantity);
 
@@ -175,7 +175,7 @@ int main() {
 	sortSuspects(suspects, suspectQuantity);
 	printResults(suspects, suspectQuantity);
 
-    inputFile.close();
+	inputFile.close();
 
 	return 0;
 }
